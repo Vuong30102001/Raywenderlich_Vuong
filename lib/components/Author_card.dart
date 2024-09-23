@@ -26,7 +26,7 @@ class _AuthorCardState extends State<AuthorCard> {
       padding: const EdgeInsets.all(16),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        children: <Widget>[
           CircleImage(
             imageProvider: widget.imageProvider,
             imageRadius: 28,

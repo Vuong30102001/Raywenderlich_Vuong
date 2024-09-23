@@ -25,8 +25,8 @@ class Card2 extends StatelessWidget {
           ),
           borderRadius: BorderRadius.all(Radius.circular(10.0)),
         ),
-        child: Stack(
-          children: [
+        child: Column(
+          children: <Widget>[
             //TODO: Add author imfomation
             const AuthorCard(
               authorName: 'Vuong',
@@ -36,7 +36,7 @@ class Card2 extends StatelessWidget {
             //TODO: Add positioned text
             Expanded(
               child: Stack(
-                children: [
+                children: <Widget>[
                   Positioned(
                     bottom: 15,
                     right: 15,

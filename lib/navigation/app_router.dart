@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:one_project/Home.dart';
 import 'package:one_project/fooderlich_theme.dart';
 import 'package:one_project/models/app_state_manager.dart';
+import 'package:one_project/screen/empty_grocery_screen.dart';
 import 'package:one_project/screen/grocery_item_screen.dart';
 import '../models/models.dart';
 import '../screen/screen.dart';
@@ -53,15 +54,18 @@ class AppRouter {
             path: 'item/:id',
             builder: (context, state) {
               final itemId = state.params['id'] ?? '';
+              final itemIndex = groceryManager.groceryItems.indexWhere((item) => item.id ==itemId);
               final item = groceryManager.getGroceryItem(itemId);
               return GroceryItemScreen(
                 originalItem: item,
-                onCreate: (item) {
-                  groceryManager.addItem(item);
+                onCreate: (newItem) {
+                  groceryManager.addItem(newItem);
                 },
                 onUpdate: (item) {
                   // Cần thêm index ở đây nếu cần
-                  groceryManager.updateItem(item, index);
+                  if(itemIndex != -1){
+                    groceryManager.updateItem(item, itemIndex);
+                  }
                 },
               );
             },
@@ -95,7 +99,7 @@ class AppRouter {
         return onboarding ? null : '/onboarding';
       }
 
-      if (loggingIn || onboarding) return '';
+      if (loggingIn || onboarding) return '/${FooderlichTab.explore}';
 
       return null;
     },

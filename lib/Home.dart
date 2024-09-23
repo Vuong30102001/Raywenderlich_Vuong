@@ -12,74 +12,84 @@ import 'screen/grocery_screen.dart';
 import 'models/models.dart';
 import 'package:provider/provider.dart';
 
-class Home extends StatefulWidget{
-  const Home({super.key, required int curentTab});
+class Home extends StatefulWidget {
+  final int curentTab;
+
+  const Home({super.key, required this.curentTab});
+
   @override
   State<Home> createState() => HomeState();
 }
 
-class HomeState extends State<Home>{
-  //TODO: Add state variable and function here
-  int _selectedIndex = 0;
+class HomeState extends State<Home> {
+  late int _selectedIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    // Khởi tạo _selectedIndex dựa trên curentTab từ widget
+    _selectedIndex = widget.curentTab;
+  }
+
   static List<Widget> pages = <Widget>[
     ExploreScreen(),
-    //TODO: Replace with card2
     RecipeScreen(),
-    //TODO: Replace with card3
     GroceryScreen(),
   ];
 
-  void _onItemTab(int index){
+  void _onItemTab(int index) {
     setState(() {
       _selectedIndex = index;
     });
+
+    // In ra thông tin để kiểm tra
+    print('Navigating to tab: $index');
+
+    // Cập nhật tab trong AppStateManager
+    Provider.of<AppStateManager>(context, listen: false).goToTab(index);
+    // Cập nhật đường dẫn với GoRouter
+    context.goNamed(
+      'home',
+      params: {'tab': '$index'},
+    );
   }
+
   @override
-  Widget build(BuildContext context){
-      return Consumer<TabManager>(builder: (context, tabManager, child){
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(
-              'Fooderlich',
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
+  Widget build(BuildContext context) {
+
+    // Kiểm tra giá trị của selected index
+    print('Current selected index is: $_selectedIndex');
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Fooderlich',
+          style: Theme.of(context).textTheme.headlineSmall,
+        ),
+      ),
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: pages,
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: Theme.of(context).textSelectionTheme.selectionColor,
+        currentIndex: _selectedIndex,
+        onTap: _onItemTab,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.explore),
+            label: 'Explore',
           ),
-          //TODO: Fix issue data load when switch tab and lost position scroll page
-          // body: pages[tabManager.selectedTab],
-          body: IndexedStack(
-            index: tabManager.selectedTab,
-            children: pages,
+          BottomNavigationBarItem(
+            icon: Icon(Icons.book),
+            label: 'Recipes',
           ),
-          bottomNavigationBar: BottomNavigationBar(
-            selectedItemColor: Theme.of(context).textSelectionTheme.selectionColor,
-            currentIndex: tabManager.selectedTab,
-            onTap: (index){
-              // tabManager.goToTab(index);
-              Provider.of<AppStateManager>(context, listen: false).goToTab(index);
-              context.goNamed(
-                'home',
-                params: {
-                  'tab': '${index}',
-                }
-              );
-            },
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.explore),
-                label: 'Explore',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.book),
-                label: 'Recipes',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.list),
-                label: 'To Buy',
-              ),
-            ],
+          BottomNavigationBarItem(
+            icon: Icon(Icons.list),
+            label: 'To Buy',
           ),
-        );
-      },
+        ],
+      ),
     );
   }
 }

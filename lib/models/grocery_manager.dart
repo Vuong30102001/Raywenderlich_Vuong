@@ -22,5 +22,11 @@ class GroceryManager extends ChangeNotifier{
     notifyListeners();
   }
 
-  getGroceryItem(String itemId) {}
+  GroceryItem? getGroceryItem(String itemId) {
+    try {
+      return _groceryItem.firstWhere((item) => item.id == itemId);
+    } catch (e) {
+      return null;
+    }
+  }
 }
