@@ -12,11 +12,13 @@ class AppRouter {
   final AppStateManager appStateManager;
   final ProfileManager profileManager;
   final GroceryManager groceryManager;
+  final TabManager tabManager;
 
   AppRouter(
       this.appStateManager,
       this.profileManager,
       this.groceryManager,
+      this.tabManager,
       );
 
   late final router = GoRouter(

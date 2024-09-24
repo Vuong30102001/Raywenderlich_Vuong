@@ -43,12 +43,13 @@ class EmptyGroceryScreen extends StatelessWidget {
             ),
             color: Colors.green,
             onPressed: () {
+              print('Button Press!'); // Direct log
               // Provider.of<TabManager>(context, listen: false).goToRecipe();
               context.goNamed(
                 'home',
                 params: {
-                  'tab': '${FooderlichTab.recipes.index}',
-                },
+                  'tab' : '${FooderlichTab.recipes.index}',
+                }
               );
             },
             child: Text('Browse Recipes'),

@@ -28,6 +28,7 @@ class _FoderlingState extends State<Foderling> {
     _appStateManager,
     _profileManager,
     _groceryManager,
+    _tabManager,
   );
 
   @override
