@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:one_project/models/app_state_manager.dart';
 import 'package:one_project/models/tab_manager.dart';
 import '../models/models.dart';
 import 'package:provider/provider.dart';
@@ -43,15 +44,16 @@ class EmptyGroceryScreen extends StatelessWidget {
             ),
             color: Colors.green,
             onPressed: () {
-              print('Button Press!'); // Direct log
-              // Provider.of<TabManager>(context, listen: false).goToRecipe();
+              print('Button Press!'); // Log thông tin khi nút được nhấn
+              // Provider.of<AppStateManager>(context, listen: false).goToTab(FooderlichTab.recipes.index);
               context.goNamed(
                 'home',
-                params: {
-                  'tab' : '${FooderlichTab.recipes.index}',
-                }
+                pathParameters: {
+                  'tab': '${FooderlichTab.recipes.index}', // Chuyển chỉ số tab công thức
+                },
               );
             },
+
             child: Text('Browse Recipes'),
           ),
         ],

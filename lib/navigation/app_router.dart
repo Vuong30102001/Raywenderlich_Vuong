@@ -43,10 +43,10 @@ class AppRouter {
         name: 'home',
         path: '/:tab',
         builder: (context, state) {
-          final tab = int.tryParse(state.params['tab'] ?? '') ?? 0;
+          final tab = int.tryParse(state.pathParameters['tab'] ?? '') ?? 0;
           return Home(
             key: state.pageKey,
-            curentTab: tab,
+            currentTab: tab,
           );
         },
         routes: [
@@ -55,7 +55,7 @@ class AppRouter {
             name: 'item',
             path: 'item/:id',
             builder: (context, state) {
-              final itemId = state.params['id'] ?? '';
+              final itemId = state.pathParameters['id'] ?? '';
               final itemIndex = groceryManager.groceryItems.indexWhere((item) => item.id ==itemId);
               final item = groceryManager.getGroceryItem(itemId);
               return GroceryItemScreen(
@@ -90,12 +90,12 @@ class AppRouter {
     // Xử lý chuyển hướng
     redirect: (context, state) {
       final loggedIn = appStateManager.isLoggedIn;
-      final loggingIn = state.subloc == '/login';
+      final loggingIn = state.matchedLocation == '/login';
 
       if (!loggedIn) return loggingIn ? null : '/login';
 
       final isOnboardingComplete = appStateManager.isOnboardingComplete;
-      final onboarding = state.subloc == '/onboarding';
+      final onboarding = state.matchedLocation == '/onboarding';
 
       if (!isOnboardingComplete) {
         return onboarding ? null : '/onboarding';

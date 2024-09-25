@@ -13,9 +13,9 @@ import 'models/models.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
-  final int curentTab;
+  final int currentTab;
 
-  const Home({super.key, required this.curentTab});
+  const Home({super.key, required this.currentTab});
 
   @override
   State<Home> createState() => HomeState();
@@ -28,7 +28,7 @@ class HomeState extends State<Home> {
   void initState() {
     super.initState();
     // Khởi tạo _selectedIndex dựa trên curentTab từ widget
-    _selectedIndex = widget.curentTab;
+    _selectedIndex = widget.currentTab;
   }
 
   static List<Widget> pages = <Widget>[
@@ -50,46 +50,55 @@ class HomeState extends State<Home> {
     // Cập nhật đường dẫn với GoRouter
     context.goNamed(
       'home',
-      params: {'tab': '$index'},
+      pathParameters: {'tab': '$index'},
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    return Consumer<AppStateManager>(
+      builder: (context, appStateManager, child) {
+        // Cập nhật _selectedIndex từ selectedTab trong AppStateManager
+        _selectedIndex = appStateManager.selectedTab;
 
-    // Kiểm tra giá trị của selected index
-    print('Current selected index is: $_selectedIndex');
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Fooderlich',
-          style: Theme.of(context).textTheme.headlineSmall,
-        ),
-      ),
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: pages,
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Theme.of(context).textSelectionTheme.selectionColor,
-        currentIndex: _selectedIndex,
-        onTap: _onItemTab,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.explore),
-            label: 'Explore',
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(
+              'Fooderlich',
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .headlineSmall,
+            ),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.book),
-            label: 'Recipes',
+          body: IndexedStack(
+            index: _selectedIndex,
+            children: pages,
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.list),
-            label: 'To Buy',
+          bottomNavigationBar: BottomNavigationBar(
+            selectedItemColor: Theme
+                .of(context)
+                .textSelectionTheme
+                .selectionColor,
+            currentIndex: _selectedIndex,
+            onTap: _onItemTab,
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.explore),
+                label: 'Explore',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.book),
+                label: 'Recipes',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.list),
+                label: 'To Buy',
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
